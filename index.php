@@ -24,17 +24,17 @@ session_start();
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
           <?php if ($_SESSION['id']) : ?>
             <li class="nav-item">
-              <a href="sign_out.php"　class="nav-link">ログアウト</a>
+              <a href="sign_out.php" class="nav-link">ログアウト</a>
             </li>
             <li class="nav-item">
-              <a href="new.php"　class="nav-link">New Post</a>
+              <a href="new.php" class="nav-link">New Post</a>
             </li>
           <?php else : ?>
             <li class="nav-item">
-              <a href="sign_in.php"　class="nav-link">ログイン</a>
+              <a href="sign_in.php" class="nav-link">ログイン</a>
             </li>
             <li class="nav-item">
-              <a href="sign_up.php"　class="nav-link">アカウント登録</a>
+              <a href="sign_up.php" class="nav-link">アカウント登録</a>
             </li>
           <?php endif; ?>
         </ul>
