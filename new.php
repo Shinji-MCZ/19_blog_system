@@ -41,8 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
 
   $stmt->execute();
-    }
+  $id = $dbh->lastInsertId();
+  header("Location: show.php?id={$id}");
+  exit;
   }
+}
 
 ?>
 
@@ -104,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <select name="categpry_id" class="form-control" require>
                       <option value="" disabled selected>選択してください</option>
                       <?php foreach ($categories as $c) :?>
-                        <option value="<?php echo $c['id']; ?>"><?php echo $c['name']; ?></option>
+                        <option value="<?php echo h($c['id']); ?>"><?php echo h($c['name']); ?></option>
                       <?php endforeach; ?>
                     </select>
                   </div>
