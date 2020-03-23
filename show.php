@@ -5,7 +5,7 @@ require_once('functions.php');
 
 session_start();
 
-$id=$_GET['id'];
+$id = $_GET['id'];
 if (!is_numeric($id)) {
   header('Location: index.php');
   exit;
@@ -25,6 +25,7 @@ ON
 where
   p.id = :id
 SQL;
+
 $stmt = $dbh->prepare($sql);
 $stmt->bindParam(":id", $id, PDO::PARAM_INT);
 $stmt->execute();
@@ -86,7 +87,7 @@ if (empty($post)) {
           <?php if (($_SESSION['id']) && ($_SESSION['id'] == $post['user_id'])) : ?>
             <a href="edit.php?id=<?php echo h($post['id']); ?>" class="btn btn-secondary">編集</a>
           <?php endif; ?>
-          <a href="index.php" class="btn btn-info">戻る</a>
+            <a href="index.php" class="btn btn-info">戻る</a>
         </div>
       </div>
     </div>
