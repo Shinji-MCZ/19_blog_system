@@ -1,51 +1,26 @@
 <?php
 
-require_once('config.php');
 require_once('functions.php');
+require_once('categories.php');
+require_once('posts.php');
 
 session_start();
-$dbh = connectDb();
 
-$sql = "select * from categories";
-$stmt = $dbh->prepare($sql);
-$stmt->execute();
+$categories = getAllCategories();
 
-$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-//リクエストがPOSTだったら
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $title = $_POST['title'];
-  $body = $_POST['body'];
-  $category_id = $_POST['categpry_id'];
-  $user_id = $_SESSION['id'];
 
-  $errors = [];
+  $errors = inputChkPost($_POST);
 
-  if ($title == '') {
-    $errors = 'タイトルが未入力です';
-  }
-  if ($category_id == '') {
-    $errors = 'カテゴリーが未入力です';
-  }
-  if ($body == '') {
-    $errors = '本文が未入力です';
-  }
-  
   if (empty($errors)) {
-  $sql = "insert into posts " ."(title, body, category_id, user_id, created_at, updated_at) values  " . "(:title, :body, :category_id, :user_id, now(), now())";
-  $stmt = $dbh->prepare($sql);
-
-  $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-  $stmt->bindParam(':body', $body, PDO::PARAM_STR);
-  $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-  $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-
-  $stmt->execute();
-  $id = $dbh->lastInsertId();
-  header("Location: show.php?id={$id}");
-  exit;
+    $id = insertPost($_POST);
+    if ($id > 0) {
+    header("Location: show.php?id={$id}");
+    exit;
+    }
   }
 }
+
 
 ?>
 
@@ -104,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   </div> 
                   <div class="form-group">
                     <label for="category_id">カテゴリー</label>
-                    <select name="categpry_id" class="form-control" require>
+                    <select name="category_id" class="form-control" require>
                       <option value="" disabled selected>選択してください</option>
                       <?php foreach ($categories as $c) :?>
                         <option value="<?php echo h($c['id']); ?>"><?php echo h($c['name']); ?></option>

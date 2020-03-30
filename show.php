@@ -1,7 +1,7 @@
 <?php
 
-require_once('config.php');
 require_once('functions.php');
+require_once('posts.php');
 
 session_start();
 
@@ -11,26 +11,7 @@ if (!is_numeric($id)) {
   exit;
 }
 
-$dbh = connectDb();
-$sql = <<<SQL
-SELECT
-  p.*,
-  c.name
-FROM
-  posts p 
-LEFT JOIN
-  categories c
-ON
-  p.category_id = c.id
-where
-  p.id = :id
-SQL;
-
-$stmt = $dbh->prepare($sql);
-$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-$stmt->execute();
-
-$post = $stmt->fetch(PDO::FETCH_ASSOC);
+$post = getPostFindById($id);
 if (empty($post)) {
   header('Location: index.php');
   exit;
